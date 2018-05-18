@@ -1,31 +1,28 @@
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
- int modo;
+int modo;
 char x,y,novoX,novoY;
 
-bool jogadaValida(char x, char y, int peca, char tab[8][8]){
-    if( (x >= 'a' && x <= 'h') && (y >= '1' && y <= '8' ) ){
-        if(tab[y-49][x-97] == 'x' && peca == 1){
-            return true;
-        }
-        else if(tab[y-49][x-97] == 'o' && peca == 2){
-            return true;
-        }
-        else
-            return false;
-    }
-    else
-        return false;
 
-}
 
-void jogador(char x, char y, char novoX , char novoY , char tab[8][8] ){
-        tab[novoY-49][novoX-97] = tab[y-49][x-97];
-        tab[y-49][x-97] = ' ';
 
-}
-void ImprimeTabuleiro(char tab[8][8]){
+
+char tab[8][8]
+{
+    {'#','x','#','x','#','x','#','x'},
+    {'x','#','x','#','x','#','x','#'},
+    {'#','x','#','x','#','x','#','x'},
+    {' ','#',' ','#',' ','#',' ','#'},
+    {'#',' ','#',' ','#',' ','#',' '},
+    {'o','#','o','#','o','#','o','#'},
+    {'#','o','#','o','#','o','#','o'},
+    {'o','#','o','#','o','#','o','#'},
+};
+
+void ImprimeTabuleiro(char tab[8][8])
+{
     cout << "          a   b   c   d   e   f   g   h" << endl;
     cout << "        |---|---|---|---|---|---|---|---|" << endl;
     cout << "     1  ||||| " << tab[0][1] << " ||||| "<< tab[0][3] <<" ||||| "<< tab[0][5] << " ||||| " << tab[0][7] << " |" << endl;
@@ -48,16 +45,98 @@ void ImprimeTabuleiro(char tab[8][8]){
 
 }
 
-char tab[8][8]{
-    {'#','x','#','x','#','x','#','x'},
-    {'x','#','x','#','x','#','x','#'},
-    {'#','x','#','x','#','x','#','x'},
-    {' ','#',' ','#',' ','#',' ','#'},
-    {'#',' ','#',' ','#',' ','#',' '},
-    {'o','#','o','#','o','#','o','#'},
-    {'#','o','#','o','#','o','#','o'},
-    {'o','#','o','#','o','#','o','#'},
-};
+
+
+void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8])
+{
+    char XY = tab[novoY-49][novoX-97];
+    if(( x >= 'a' && x <= 'h') &&  (y >= '1' && y <= '8' ) )
+    {
+
+        // Movimento simples para frente:
+
+        // PECA PRETA (X)
+        if(tab[y-49][x-97] == 'x' && jogador == 1)
+        {
+            if( (tab[y-48][x-98] == ' ' || tab[y-48][x-96] == ' ') && ( (XY == tab[y-48][x-98] ) || XY == tab[y-48][x-96]  ) &&  XY == ' ' )
+            {
+                tab[novoY-49][novoX-97] = tab[y-49][x-97];
+                tab[y-49][x-97] = ' ';
+            }
+            else
+            {
+                system("cls");
+                ImprimeTabuleiro(tab);
+                cout << "Nao é possivel efetuar a jogada!, digite novamente: \n" << endl;
+                cout << "Jogador " <<  jogador << " , digite a peca que deseja mover (exemplo: b 3)" << endl;
+                cin >> x >> y;
+                cout << "Jogador " <<  jogador << " , digite o local que a peca irá se mover (exemplo: b 3)" << endl;
+                cin >> novoX >> novoY;
+                movimento(x,y,novoX,novoY,jogador,tab);
+            }
+
+        }
+
+        // PECA BRANCA (O)
+        else if(tab[y-49][x-97] == 'o' && jogador == 2)
+        {
+            if( (tab[y-50][x-98] == ' ' || tab[y-50][x-96] == ' ') && ( (XY == tab[y-50][x-98] ) || XY == tab[y-50][x-96]  ) &&  XY == ' '  )
+            {
+                tab[novoY-49][novoX-97] = tab[y-49][x-97];
+                tab[y-49][x-97] = ' ';
+
+            }
+
+            else{
+                system("cls");
+                ImprimeTabuleiro(tab);
+                cout << "Nao é possivel efetuar a jogada!, digite novamente: \n" << endl;
+                cout << "Jogador " <<  jogador << " , digite a peca que deseja mover (exemplo: b 3)" << endl;
+                cin >> x >> y;
+                cout << "Jogador " <<  jogador << " , digite o local que a peca irá se mover (exemplo: b 3)" << endl;
+                cin >> novoX >> novoY;
+                movimento(x,y,novoX,novoY,jogador,tab);
+            }
+        }
+
+        else{
+                system("cls");
+                ImprimeTabuleiro(tab);
+                cout << "Nao é possivel efetuar a jogada!, digite novamente: \n" << endl;
+                cout << "Jogador " <<  jogador << " , digite a peca que deseja mover (exemplo: b 3)" << endl;
+                cin >> x >> y;
+                cout << "Jogador " <<  jogador << " , digite o local que a peca irá se mover (exemplo: b 3)" << endl;
+                cin >> novoX >> novoY;
+                movimento(x,y,novoX,novoY,jogador,tab);
+            }
+
+
+    }
+    else
+    {
+                system("cls");
+                ImprimeTabuleiro(tab);
+                cout << "Nao é possivel efetuar a jogada!, digite novamente: \n" << endl;
+                cout << "Jogador " <<  jogador << " , digite a peca que deseja mover (exemplo: b 3)" << endl;
+                cin >> x >> y;
+                cout << "Jogador " <<  jogador << " , digite o local que a peca irá se mover (exemplo: b 3)" << endl;
+                cin >> novoX >> novoY;
+                movimento(x,y,novoX,novoY,jogador,tab);
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 int main()
@@ -67,53 +146,36 @@ int main()
     cout << "1. Jogador Vs Jogador" << endl;
     cout << "2. Jogador Vs Computador" << endl;
     cin >> modo;
-    while(modo != 1 && modo != 2){  cout << "Jogador 1 (x) , digite a peca que deseja mover (exemplo: b 3)" << endl;
-        cin >> x >> y;
-        while(!jogadaValida(x,y,1, tab)){
-            cout << "JOGADA INVALIDA, ESCOLHA NOVAMENTE A PECA QUE DESEJA MOVER: " << endl;
-            cin >> x >> y;
-        }
-        cout << "Jogador 1 (x) , digite para onde peca deve ser movida (exemplo: b 3)" << endl;
-        cin >> novoX >> novoY;
-        jogador(x,y,novoX,novoY,tab);
-        ImprimeTabuleiro(tab);
+    while(modo != 1 && modo != 2)
+    {
         cout << "Modo invalido, digite novamente: "<< endl;
         cin >> modo;
     }
-    switch (modo){
+    switch(modo)
+    {
+    // JOGAODR VS JOGADOR
     case 1:
+        while(1){
+        system("cls");
         ImprimeTabuleiro(tab);
         cout << "Jogador 1 (x) , digite a peca que deseja mover (exemplo: b 3)" << endl;
         cin >> x >> y;
-        while(!jogadaValida(x,y,1, tab)){
-            cout << "JOGADA INVALIDA, ESCOLHA NOVAMENTE A PECA QUE DESEJA MOVER: " << endl;
-            cin >> x >> y;
-        }
         cout << "Jogador 1 (x) , digite para onde peca deve ser movida (exemplo: b 3)" << endl;
         cin >> novoX >> novoY;
-        jogador(x,y,novoX,novoY,tab);
+        movimento(x,y,novoX,novoY,1,tab);
         ImprimeTabuleiro(tab);
         cout << "Jogador 2 (o) , digite a peca que deseja mover (exemplo: b 3)" << endl;
         cin >> x >> y;
-        while(!jogadaValida(x,y,2, tab)){
-            cout << "JOGADA INVALIDA, ESCOLHA NOVAMENTE A PECA QUE DESEJA MOVER: " << endl;
-            cin >> x >> y;
-        }
         cout << "Jogador 2 (o) , digite para onde peca deve ser movida (exemplo: b 3)" << endl;
         cin >> novoX >> novoY;
-        jogador(x,y,novoX,novoY,tab);
-        ImprimeTabuleiro(tab);
-
-
-        break;
-    case 2:
-        ImprimeTabuleiro(tab);
-        while(1){
-            cin >> x >> y;
-            tab[y-49][x-97] = 'A';
-            ImprimeTabuleiro(tab);
+        movimento(x,y,novoX,novoY,2,tab);
 
         }
+        break;
+
+    // JOGADOR VS COMPUTADOR
+    case 2:
+
         break;
 
 
