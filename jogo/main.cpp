@@ -11,10 +11,10 @@ char tab[8][8]
 {
     {'#','x','#','x','#','x','#','x'},
     {'x','#','x','#','x','#','x','#'},
-    {'#','x','#','x','#','x','#','x'},
-    {' ','#',' ','#',' ','#',' ','#'},
-    {'#',' ','#',' ','#',' ','#',' '},
-    {'o','#','o','#','o','#','o','#'},
+    {'#',' ','#','x','#','x','#','x'},
+    {' ','#','x','#',' ','#',' ','#'},
+    {'#','o','#','o','#',' ','#',' '},
+    {' ','#','o','#',' ','#','o','#'},
     {'#','o','#','o','#','o','#','o'},
     {'o','#','o','#','o','#','o','#'},
 };
@@ -65,11 +65,20 @@ void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8]
         if(tab[y-49][x-97] == 'x' && jogador == 1)
         {
             // Movimento simples para frente:
-            if( (tab[y-48][x-98] == ' ' || tab[y-48][x-96] == ' ') && ( (XY == tab[y-48][x-98] ) || XY == tab[y-48][x-96]  ) &&  XY == ' ' )
+            if( ( (XY == tab[y-48][x-98] ) || XY == tab[y-48][x-96]  ) &&  XY == ' ' )
             {
                 tab[novoY-49][novoX-97] = tab[y-49][x-97];
                 tab[y-49][x-97] = ' ';
             }
+            // Captura pela esquerda
+            else if( ( tab[y-48][x-98] == 'o' ) && XY == tab[y-47][x-99] && XY == ' '  ){
+                cout << "TO AQUI" << endl;
+                tab[novoY-49][novoX-97] = 'x' ;
+                tab[y-49][x-97] = ' ';
+                tab[y-48][x-98] = ' ';
+
+            }
+
             else
             {
                 novamente(x,y,novoX,novoY, jogador);
@@ -82,7 +91,7 @@ void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8]
         else if(tab[y-49][x-97] == 'o' && jogador == 2)
         {
             // Movimento simples para frente:
-            if( (tab[y-50][x-98] == ' ' || tab[y-50][x-96] == ' ') && ( (XY == tab[y-50][x-98] ) || XY == tab[y-50][x-96]  ) &&  XY == ' '  )
+            if( ( (XY == tab[y-50][x-98] ) || XY == tab[y-50][x-96]  ) &&  XY == ' '  )
             {
                 tab[novoY-49][novoX-97] = tab[y-49][x-97];
                 tab[y-49][x-97] = ' ';
@@ -159,7 +168,11 @@ int main()
 
     // JOGADOR VS COMPUTADOR
     case 2:
-
+        int a;
+        cin >> a;
+        for(int i = a; i >=0; i--){
+            cout << tab[i][0] << endl;
+        }
         break;
 
 
@@ -167,6 +180,3 @@ int main()
 
     return 0;
 }
-
-
-
