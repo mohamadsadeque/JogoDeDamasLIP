@@ -7,8 +7,6 @@ char x,y,novoX,novoY;
 
 
 
-
-
 char tab[8][8]
 {
     {'#','x','#','x','#','x','#','x'},
@@ -45,26 +43,7 @@ void ImprimeTabuleiro(char tab[8][8])
 
 }
 
-
-
-void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8])
-{
-    char XY = tab[novoY-49][novoX-97];
-    if(( x >= 'a' && x <= 'h') &&  (y >= '1' && y <= '8' ) )
-    {
-
-        // Movimento simples para frente:
-
-        // PECA PRETA (X)
-        if(tab[y-49][x-97] == 'x' && jogador == 1)
-        {
-            if( (tab[y-48][x-98] == ' ' || tab[y-48][x-96] == ' ') && ( (XY == tab[y-48][x-98] ) || XY == tab[y-48][x-96]  ) &&  XY == ' ' )
-            {
-                tab[novoY-49][novoX-97] = tab[y-49][x-97];
-                tab[y-49][x-97] = ' ';
-            }
-            else
-            {
+void novamente(char &x, char &y, char &novoX, char &novoY, int jogador){
                 system("cls");
                 ImprimeTabuleiro(tab);
                 cout << "Nao é possivel efetuar a jogada!, digite novamente: \n" << endl;
@@ -72,6 +51,28 @@ void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8]
                 cin >> x >> y;
                 cout << "Jogador " <<  jogador << " , digite o local que a peca irá se mover (exemplo: b 3)" << endl;
                 cin >> novoX >> novoY;
+}
+
+void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8])
+{
+    char XY = tab[novoY-49][novoX-97];
+    if(( x >= 'a' && x <= 'h') &&  (y >= '1' && y <= '8' ) )
+    {
+
+
+
+        // PECA PRETA (X)
+        if(tab[y-49][x-97] == 'x' && jogador == 1)
+        {
+            // Movimento simples para frente:
+            if( (tab[y-48][x-98] == ' ' || tab[y-48][x-96] == ' ') && ( (XY == tab[y-48][x-98] ) || XY == tab[y-48][x-96]  ) &&  XY == ' ' )
+            {
+                tab[novoY-49][novoX-97] = tab[y-49][x-97];
+                tab[y-49][x-97] = ' ';
+            }
+            else
+            {
+                novamente(x,y,novoX,novoY, jogador);
                 movimento(x,y,novoX,novoY,jogador,tab);
             }
 
@@ -80,6 +81,7 @@ void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8]
         // PECA BRANCA (O)
         else if(tab[y-49][x-97] == 'o' && jogador == 2)
         {
+            // Movimento simples para frente:
             if( (tab[y-50][x-98] == ' ' || tab[y-50][x-96] == ' ') && ( (XY == tab[y-50][x-98] ) || XY == tab[y-50][x-96]  ) &&  XY == ' '  )
             {
                 tab[novoY-49][novoX-97] = tab[y-49][x-97];
@@ -88,25 +90,13 @@ void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8]
             }
 
             else{
-                system("cls");
-                ImprimeTabuleiro(tab);
-                cout << "Nao é possivel efetuar a jogada!, digite novamente: \n" << endl;
-                cout << "Jogador " <<  jogador << " , digite a peca que deseja mover (exemplo: b 3)" << endl;
-                cin >> x >> y;
-                cout << "Jogador " <<  jogador << " , digite o local que a peca irá se mover (exemplo: b 3)" << endl;
-                cin >> novoX >> novoY;
+                novamente(x,y,novoX,novoY, jogador);
                 movimento(x,y,novoX,novoY,jogador,tab);
             }
         }
 
         else{
-                system("cls");
-                ImprimeTabuleiro(tab);
-                cout << "Nao é possivel efetuar a jogada!, digite novamente: \n" << endl;
-                cout << "Jogador " <<  jogador << " , digite a peca que deseja mover (exemplo: b 3)" << endl;
-                cin >> x >> y;
-                cout << "Jogador " <<  jogador << " , digite o local que a peca irá se mover (exemplo: b 3)" << endl;
-                cin >> novoX >> novoY;
+                novamente(x,y,novoX,novoY, jogador);
                 movimento(x,y,novoX,novoY,jogador,tab);
             }
 
@@ -114,13 +104,7 @@ void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8]
     }
     else
     {
-                system("cls");
-                ImprimeTabuleiro(tab);
-                cout << "Nao é possivel efetuar a jogada!, digite novamente: \n" << endl;
-                cout << "Jogador " <<  jogador << " , digite a peca que deseja mover (exemplo: b 3)" << endl;
-                cin >> x >> y;
-                cout << "Jogador " <<  jogador << " , digite o local que a peca irá se mover (exemplo: b 3)" << endl;
-                cin >> novoX >> novoY;
+                novamente(x,y,novoX,novoY, jogador);
                 movimento(x,y,novoX,novoY,jogador,tab);
     }
 
@@ -183,3 +167,6 @@ int main()
 
     return 0;
 }
+
+
+
