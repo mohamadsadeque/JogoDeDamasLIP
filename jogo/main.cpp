@@ -4,17 +4,18 @@
 using namespace std;
 int modo;
 char x,y,novoX,novoY;
-
+int brancas = 1;
+int pretas = 12;
 
 
 char tab[8][8]
 {
     {'#','x','#','x','#','x','#','x'},
     {'x','#','x','#','x','#','x','#'},
-    {'#',' ','#','x','#','x','#','x'},
-    {' ','#','x','#',' ','#',' ','#'},
-    {'#','o','#','o','#',' ','#',' '},
-    {' ','#','o','#',' ','#','o','#'},
+    {'#','x','#','x','#','x','#','x'},
+    {' ','#',' ','#',' ','#',' ','#'},
+    {'#',' ','#',' ','#',' ','#',' '},
+    {'o','#','o','#','o','#','o','#'},
     {'#','o','#','o','#','o','#','o'},
     {'o','#','o','#','o','#','o','#'},
 };
@@ -71,11 +72,23 @@ void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8]
                 tab[y-49][x-97] = ' ';
             }
             // Captura pela esquerda
-            else if( ( tab[y-48][x-98] == 'o' ) && XY == tab[y-47][x-99] && XY == ' '  ){
-                cout << "TO AQUI" << endl;
+            else if( ( tab[y-48][x-98] == 'o' ) && (((int)novoY == (int)(y+2)) && (int)novoX == (int)(x-2)) && XY == ' '  ){
+                cout << "ESQ" << endl;
                 tab[novoY-49][novoX-97] = 'x' ;
                 tab[y-49][x-97] = ' ';
                 tab[y-48][x-98] = ' ';
+                brancas--;
+
+            }
+
+            // Captura pela direita
+            else if( ( tab[y-48][x-96] == 'o' ) && (((int)novoY == (int)(y+2)) && (int)novoX == (int)(x+2)) && XY == ' '  ){
+                    cout << "DIR" << endl;
+                tab[novoY-49][novoX-97] = 'x' ;
+                tab[y-49][x-97] = ' ';
+                tab[y-48][x-96] = ' ';
+                brancas--;
+
 
             }
 
@@ -148,7 +161,7 @@ int main()
     {
     // JOGAODR VS JOGADOR
     case 1:
-        while(1){
+        while(pretas > 0 || brancas > 0){
         system("cls");
         ImprimeTabuleiro(tab);
         cout << "Jogador 1 (x) , digite a peca que deseja mover (exemplo: b 3)" << endl;
@@ -164,6 +177,11 @@ int main()
         movimento(x,y,novoX,novoY,2,tab);
 
         }
+        system("cls");
+        if(brancas == 0)
+            cout<< "BRANCAS GANHARAM" << endl;
+        else
+            cout << "PRETAS GANHARAM " << endl;
         break;
 
     // JOGADOR VS COMPUTADOR
