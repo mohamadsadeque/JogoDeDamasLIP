@@ -4,7 +4,7 @@
 using namespace std;
 int modo;
 char x,y,novoX,novoY;
-int brancas = 1;
+int brancas = 12;
 int pretas = 12;
 
 
@@ -54,7 +54,7 @@ void novamente(char &x, char &y, char &novoX, char &novoY, int jogador){
                 cin >> novoX >> novoY;
 }
 
-void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8])
+void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, int &pretas, char tab[8][8])
 {
     char XY = tab[novoY-49][novoX-97];
     if(( x >= 'a' && x <= 'h') &&  (y >= '1' && y <= '8' ) )
@@ -66,8 +66,9 @@ void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8]
         if(tab[y-49][x-97] == 'x' && jogador == 1)
         {
             // Movimento simples para frente:
-            if( ( (XY == tab[y-48][x-98] ) || XY == tab[y-48][x-96]  ) &&  XY == ' ' )
+            if( ( ((int)novoY == (int)(y+1)) && ((int)novoX == (int)(x-1) || (int)novoX == (int)(x+1) ) &&  XY == ' ' ))
             {
+                cout << "SIMPLES" << endl;
                 tab[novoY-49][novoX-97] = tab[y-49][x-97];
                 tab[y-49][x-97] = ' ';
             }
@@ -95,7 +96,7 @@ void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8]
             else
             {
                 novamente(x,y,novoX,novoY, jogador);
-                movimento(x,y,novoX,novoY,jogador,tab);
+                movimento(x,y,novoX,novoY,jogador,brancas, pretas,tab);
             }
 
         }
@@ -104,22 +105,42 @@ void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8]
         else if(tab[y-49][x-97] == 'o' && jogador == 2)
         {
             // Movimento simples para frente:
-            if( ( (XY == tab[y-50][x-98] ) || XY == tab[y-50][x-96]  ) &&  XY == ' '  )
+            if( ( ((int)novoY == (int)(y-1)) && ((int)novoX == (int)(x-1) || (int)novoX == (int)(x+1) ) &&  XY == ' '  ))
             {
                 tab[novoY-49][novoX-97] = tab[y-49][x-97];
                 tab[y-49][x-97] = ' ';
 
             }
+             // Captura pela esquerda
+            else if( ( tab[y-50][x-98] == 'x' ) && (((int)novoY == (int)(y-2)) && (int)novoX == (int)(x-2)) && XY == ' '  ){
+                cout << "ESQ" << endl;
+                tab[novoY-49][novoX-97] = 'o' ;
+                tab[y-49][x-97] = ' ';
+                tab[y-50][x-98] = ' ';
+                pretas--;
+
+            }
+
+            // Captura pela direita
+            else if( ( tab[y-50][x-96] == 'x' ) && (((int)novoY == (int)(y-2)) && (int)novoX == (int)(x+2)) && XY == ' '  ){
+                    cout << "DIR" << endl;
+                tab[novoY-49][novoX-97] = 'o' ;
+                tab[y-49][x-97] = ' ';
+                tab[y-50][x-96] = ' ';
+                pretas--;
+
+
+            }
 
             else{
                 novamente(x,y,novoX,novoY, jogador);
-                movimento(x,y,novoX,novoY,jogador,tab);
+                movimento(x,y,novoX,novoY,jogador,brancas, pretas,tab);
             }
         }
 
         else{
                 novamente(x,y,novoX,novoY, jogador);
-                movimento(x,y,novoX,novoY,jogador,tab);
+                movimento(x,y,novoX,novoY,jogador,brancas, pretas,tab);
             }
 
 
@@ -127,7 +148,7 @@ void movimento(char x, char y,char novoX, char novoY,int jogador, char tab[8][8]
     else
     {
                 novamente(x,y,novoX,novoY, jogador);
-                movimento(x,y,novoX,novoY,jogador,tab);
+                movimento(x,y,novoX,novoY,jogador,brancas, pretas,tab);
     }
 
 }
@@ -161,27 +182,30 @@ int main()
     {
     // JOGAODR VS JOGADOR
     case 1:
-        while(pretas > 0 || brancas > 0){
+        while(pretas > 0){
         system("cls");
         ImprimeTabuleiro(tab);
         cout << "Jogador 1 (x) , digite a peca que deseja mover (exemplo: b 3)" << endl;
         cin >> x >> y;
         cout << "Jogador 1 (x) , digite para onde peca deve ser movida (exemplo: b 3)" << endl;
         cin >> novoX >> novoY;
-        movimento(x,y,novoX,novoY,1,tab);
+        movimento(x,y,novoX,novoY,1,brancas, pretas, tab);
         ImprimeTabuleiro(tab);
+        if(brancas == 0){
+            break;
+        }
         cout << "Jogador 2 (o) , digite a peca que deseja mover (exemplo: b 3)" << endl;
         cin >> x >> y;
         cout << "Jogador 2 (o) , digite para onde peca deve ser movida (exemplo: b 3)" << endl;
         cin >> novoX >> novoY;
-        movimento(x,y,novoX,novoY,2,tab);
+        movimento(x,y,novoX,novoY,2, brancas, pretas, tab);
 
         }
         system("cls");
         if(brancas == 0)
-            cout<< "BRANCAS GANHARAM" << endl;
+            cout<< "PRETAS GANHARAM" << endl;
         else
-            cout << "PRETAS GANHARAM " << endl;
+            cout << "BRANCAS GANHARAM " << endl;
         break;
 
     // JOGADOR VS COMPUTADOR
