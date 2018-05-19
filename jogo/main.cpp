@@ -44,55 +44,48 @@ void ImprimeTabuleiro(char tab[8][8])
 
 }
 
-void novamente(char &x, char &y, char &novoX, char &novoY, int jogador){
-                system("cls");
-                ImprimeTabuleiro(tab);
-                cout << "Nao é possivel efetuar a jogada!, digite novamente: \n" << endl;
-                cout << "Jogador " <<  jogador << " , digite a peca que deseja mover (exemplo: b 3)" << endl;
-                cin >> x >> y;
-                cout << "Jogador " <<  jogador << " , digite o local que a peca irá se mover (exemplo: b 3)" << endl;
-                cin >> novoX >> novoY;
+void novamente(char &x, char &y, char &novoX, char &novoY, int jogador)
+{
+    system("cls");
+    ImprimeTabuleiro(tab);
+    cout << "Nao é possivel efetuar a jogada!, digite novamente: \n" << endl;
+    cout << "Jogador " <<  jogador << " , digite a peca que deseja mover (exemplo: b 3)" << endl;
+    cin >> x >> y;
+    cout << "Jogador " <<  jogador << " , digite o local que a peca irá se mover (exemplo: b 3)" << endl;
+    cin >> novoX >> novoY;
 }
 
 void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, int &pretas, char tab[8][8])
 {
     char XY = tab[novoY-49][novoX-97];
-    if(( x >= 'a' && x <= 'h') &&  (y >= '1' && y <= '8' ) )
+    if(( x >= 'a' && x <= 'h') &&  (y >= '1' && y <= '8' ) && ( novoX >= 'a' && novoX <= 'h') &&  (novoY >= '1' && novoY <= '8' ) )
     {
-
-
-
         // PECA PRETA (X)
         if(tab[y-49][x-97] == 'x' && jogador == 1)
         {
             // Movimento simples para frente:
             if( ( ((int)novoY == (int)(y+1)) && ((int)novoX == (int)(x-1) || (int)novoX == (int)(x+1) ) &&  XY == ' ' ))
             {
-                cout << "SIMPLES" << endl;
                 tab[novoY-49][novoX-97] = tab[y-49][x-97];
                 tab[y-49][x-97] = ' ';
             }
             // Captura pela esquerda
-            else if( ( tab[y-48][x-98] == 'o' ) && (((int)novoY == (int)(y+2)) && (int)novoX == (int)(x-2)) && XY == ' '  ){
-                cout << "ESQ" << endl;
+            else if( ( tab[y-48][x-98] == 'o' ) && (((int)novoY == (int)(y+2)) && (int)novoX == (int)(x-2)) && XY == ' '  )
+            {
                 tab[novoY-49][novoX-97] = 'x' ;
                 tab[y-49][x-97] = ' ';
                 tab[y-48][x-98] = ' ';
                 brancas--;
 
             }
-
             // Captura pela direita
-            else if( ( tab[y-48][x-96] == 'o' ) && (((int)novoY == (int)(y+2)) && (int)novoX == (int)(x+2)) && XY == ' '  ){
-                    cout << "DIR" << endl;
+            else if( ( tab[y-48][x-96] == 'o' ) && (((int)novoY == (int)(y+2)) && (int)novoX == (int)(x+2)) && XY == ' '  )
+            {
                 tab[novoY-49][novoX-97] = 'x' ;
                 tab[y-49][x-97] = ' ';
                 tab[y-48][x-96] = ' ';
                 brancas--;
-
-
             }
-
             else
             {
                 novamente(x,y,novoX,novoY, jogador);
@@ -111,9 +104,9 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                 tab[y-49][x-97] = ' ';
 
             }
-             // Captura pela esquerda
-            else if( ( tab[y-50][x-98] == 'x' ) && (((int)novoY == (int)(y-2)) && (int)novoX == (int)(x-2)) && XY == ' '  ){
-                cout << "ESQ" << endl;
+            // Captura pela esquerda
+            else if( ( tab[y-50][x-98] == 'x' ) && (((int)novoY == (int)(y-2)) && (int)novoX == (int)(x-2)) && XY == ' '  )
+            {
                 tab[novoY-49][novoX-97] = 'o' ;
                 tab[y-49][x-97] = ' ';
                 tab[y-50][x-98] = ' ';
@@ -122,8 +115,8 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
             }
 
             // Captura pela direita
-            else if( ( tab[y-50][x-96] == 'x' ) && (((int)novoY == (int)(y-2)) && (int)novoX == (int)(x+2)) && XY == ' '  ){
-                    cout << "DIR" << endl;
+            else if( ( tab[y-50][x-96] == 'x' ) && (((int)novoY == (int)(y-2)) && (int)novoX == (int)(x+2)) && XY == ' '  )
+            {
                 tab[novoY-49][novoX-97] = 'o' ;
                 tab[y-49][x-97] = ' ';
                 tab[y-50][x-96] = ' ';
@@ -132,23 +125,25 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
 
             }
 
-            else{
+            else
+            {
                 novamente(x,y,novoX,novoY, jogador);
                 movimento(x,y,novoX,novoY,jogador,brancas, pretas,tab);
             }
         }
 
-        else{
-                novamente(x,y,novoX,novoY, jogador);
-                movimento(x,y,novoX,novoY,jogador,brancas, pretas,tab);
-            }
+        else
+        {
+            novamente(x,y,novoX,novoY, jogador);
+            movimento(x,y,novoX,novoY,jogador,brancas, pretas,tab);
+        }
 
 
     }
     else
     {
-                novamente(x,y,novoX,novoY, jogador);
-                movimento(x,y,novoX,novoY,jogador,brancas, pretas,tab);
+        novamente(x,y,novoX,novoY, jogador);
+        movimento(x,y,novoX,novoY,jogador,brancas, pretas,tab);
     }
 
 }
@@ -156,69 +151,56 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
 
 
 
-
-
-
-
-
-
-
-
-
-
 int main()
 {
-
-    cout << "Digite a opção que deseja: " << endl;
-    cout << "1. Jogador Vs Jogador" << endl;
-    cout << "2. Jogador Vs Computador" << endl;
-    cin >> modo;
-    while(modo != 1 && modo != 2)
+    while(1)
     {
-        cout << "Modo invalido, digite novamente: "<< endl;
+        cout << "Digite a opção que deseja: " << endl;
+        cout << "1. Jogador Vs Jogador" << endl;
+        cout << "2. Jogador Vs Computador" << endl;
         cin >> modo;
-    }
-    switch(modo)
-    {
-    // JOGAODR VS JOGADOR
-    case 1:
-        while(pretas > 0){
-        system("cls");
-        ImprimeTabuleiro(tab);
-        cout << "Jogador 1 (x) , digite a peca que deseja mover (exemplo: b 3)" << endl;
-        cin >> x >> y;
-        cout << "Jogador 1 (x) , digite para onde peca deve ser movida (exemplo: b 3)" << endl;
-        cin >> novoX >> novoY;
-        movimento(x,y,novoX,novoY,1,brancas, pretas, tab);
-        ImprimeTabuleiro(tab);
-        if(brancas == 0){
+        while(modo != 1 && modo != 2)
+        {
+            cout << "Modo invalido, digite novamente: "<< endl;
+            cin >> modo;
+        }
+        switch(modo)
+        {
+        // JOGAODR VS JOGADOR
+        case 1:
+            while(pretas > 0)
+            {
+                system("cls");
+                ImprimeTabuleiro(tab);
+                cout << "Jogador 1 (x) , digite a peca que deseja mover (exemplo: b 3)" << endl;
+                cin >> x >> y;
+                cout << "Jogador 1 (x) , digite para onde peca deve ser movida (exemplo: b 3)" << endl;
+                cin >> novoX >> novoY;
+                movimento(x,y,novoX,novoY,1,brancas, pretas, tab);
+                ImprimeTabuleiro(tab);
+                if(brancas == 0)
+                {
+                    break;
+                }
+                cout << "Jogador 2 (o) , digite a peca que deseja mover (exemplo: b 3)" << endl;
+                cin >> x >> y;
+                cout << "Jogador 2 (o) , digite para onde peca deve ser movida (exemplo: b 3)" << endl;
+                cin >> novoX >> novoY;
+                movimento(x,y,novoX,novoY,2, brancas, pretas, tab);
+            }
+            system("cls");
+            if(brancas == 0)
+                cout<< "PRETAS GANHARAM" << endl;
+            else
+                cout << "BRANCAS GANHARAM " << endl;
             break;
-        }
-        cout << "Jogador 2 (o) , digite a peca que deseja mover (exemplo: b 3)" << endl;
-        cin >> x >> y;
-        cout << "Jogador 2 (o) , digite para onde peca deve ser movida (exemplo: b 3)" << endl;
-        cin >> novoX >> novoY;
-        movimento(x,y,novoX,novoY,2, brancas, pretas, tab);
+
+        // JOGADOR VS COMPUTADOR
+
+
 
         }
-        system("cls");
-        if(brancas == 0)
-            cout<< "PRETAS GANHARAM" << endl;
-        else
-            cout << "BRANCAS GANHARAM " << endl;
-        break;
 
-    // JOGADOR VS COMPUTADOR
-    case 2:
-        int a;
-        cin >> a;
-        for(int i = a; i >=0; i--){
-            cout << tab[i][0] << endl;
-        }
-        break;
-
-
+        return 0;
     }
-
-    return 0;
 }
