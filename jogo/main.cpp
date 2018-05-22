@@ -6,7 +6,7 @@ int modo;
 char x,y,novoX,novoY;
 int brancas = 12;
 int pretas = 12;
-
+int a,b,A,B;
 
 char tab[8][8]
 {
@@ -44,82 +44,87 @@ void ImprimeTabuleiro(char tab[8][8])
 
 }
 
-void novamente(char &x, char &y, char &novoX, char &novoY, int jogador)
+void novamente(char &x, char &y, char &novoX, char &novoY, int jogador,int &a,int &b, int &A, int &B)
 {
     system("cls");
     ImprimeTabuleiro(tab);
     cout << "Nao é possivel efetuar a jogada!, digite novamente: \n" << endl;
     cout << "Jogador " <<  jogador << " , digite a peca que deseja mover (exemplo: b 3)" << endl;
     cin >> x >> y;
-    cout << "Jogador " <<  jogador << " , digite o local que a peca irá se mover (exemplo: b 3)" << endl;
+    cout << "Jogador " <<  jogador << " , digite o local que a peca irá se mover (exemplo: c 4)" << endl;
     cin >> novoX >> novoY;
+    a = (int)x - 97;
+    b = (int)y - 49;
+    A = (int)novoX - 97;
+    B = (int)novoY - 49;
+
 }
 
 void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, int &pretas, char tab[8][8])
 {
-    char XY = tab[novoY-49][novoX-97];
-    if(( x >= 'a' && x <= 'h') &&  (y >= '1' && y <= '8' ) && ( novoX >= 'a' && novoX <= 'h') &&  (novoY >= '1' && novoY <= '8' ) )
+    char XY = tab[novoY][novoX];
+    if(( x >= 0 && x <= 8) &&  (y >= 0 && y <= 8 ) && ( novoX >= 0 && novoX <= 8) &&  (novoY >= 0 && novoY <= 8 ) )
     {
         // PECA PRETA (X)
-        if(tab[y-49][x-97] == 'x' && jogador == 1)
+        if(tab[y][x] == 'x' && jogador == 1)
         {
             // Movimento simples para frente:
-            if( ( ((int)novoY == (int)(y+1)) && ((int)novoX == (int)(x-1) || (int)novoX == (int)(x+1) ) &&  XY == ' ' ))
+            if ( (novoY == (y+1)) && ((novoX == (x-1) || novoX == (x+1) ) &&  XY == ' ' ))
             {
-                tab[novoY-49][novoX-97] = tab[y-49][x-97];
-                tab[y-49][x-97] = ' ';
+                tab[novoY][novoX] = tab[y][x];
+                tab[y][x] = ' ';
             }
             // Captura pela esquerda
-            else if( ( tab[y-48][x-98] == 'o' ) && (((int)novoY == (int)(y+2)) && (int)novoX == (int)(x-2)) && XY == ' '  )
+            else if( ( tab[y+1][x-1] == 'o' ) && ((novoY == (y+2)) && novoX == (x-2)) && XY == ' '  )
             {
-                tab[novoY-49][novoX-97] = 'x' ;
-                tab[y-49][x-97] = ' ';
-                tab[y-48][x-98] = ' ';
+                tab[novoY][novoX] = 'x' ;
+                tab[y][x] = ' ';
+                tab[y+1][x-1] = ' ';
                 brancas--;
 
             }
             // Captura pela direita
-            else if( ( tab[y-48][x-96] == 'o' ) && (((int)novoY == (int)(y+2)) && (int)novoX == (int)(x+2)) && XY == ' '  )
+            else if( ( tab[y+1][x+1] == 'o' ) && ((novoY == (y+2)) && novoX == (x+2)) && XY == ' '  )
             {
-                tab[novoY-49][novoX-97] = 'x' ;
-                tab[y-49][x-97] = ' ';
-                tab[y-48][x-96] = ' ';
+                tab[novoY][novoX] = 'x' ;
+                tab[y][x] = ' ';
+                tab[y+1][x+1] = ' ';
                 brancas--;
             }
             else
             {
-                novamente(x,y,novoX,novoY, jogador);
-                movimento(x,y,novoX,novoY,jogador,brancas, pretas,tab);
+                novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+                movimento(a,b,A,B,jogador,brancas, pretas,tab);
             }
 
         }
 
         // PECA BRANCA (O)
-        else if(tab[y-49][x-97] == 'o' && jogador == 2)
+        else if(tab[y][x] == 'o' && jogador == 2)
         {
             // Movimento simples para frente:
-            if( ( ((int)novoY == (int)(y-1)) && ((int)novoX == (int)(x-1) || (int)novoX == (int)(x+1) ) &&  XY == ' '  ))
+            if ( (novoY == (y-1)) && ((novoX == (x-1) || novoX == (x+1) ) &&  XY == ' '  ))
             {
-                tab[novoY-49][novoX-97] = tab[y-49][x-97];
-                tab[y-49][x-97] = ' ';
+                tab[novoY][novoX] = tab[y][x];
+                tab[y][x] = ' ';
 
             }
             // Captura pela esquerda
-            else if( ( tab[y-50][x-98] == 'x' ) && (((int)novoY == (int)(y-2)) && (int)novoX == (int)(x-2)) && XY == ' '  )
+            else if( ( tab[y-1][x-1] == 'x' ) && ((novoY == (y-2)) && novoX == (x-2)) && XY == ' '  )
             {
-                tab[novoY-49][novoX-97] = 'o' ;
-                tab[y-49][x-97] = ' ';
-                tab[y-50][x-98] = ' ';
+                tab[novoY][novoX] = 'o' ;
+                tab[y][x] = ' ';
+                tab[y-1][x-1] = ' ';
                 pretas--;
 
             }
 
             // Captura pela direita
-            else if( ( tab[y-50][x-96] == 'x' ) && (((int)novoY == (int)(y-2)) && (int)novoX == (int)(x+2)) && XY == ' '  )
+            else if( ( tab[y-1][x+1] == 'x' ) && ((novoY == (y-2)) && novoX == (x+2)) && XY == ' '  )
             {
-                tab[novoY-49][novoX-97] = 'o' ;
-                tab[y-49][x-97] = ' ';
-                tab[y-50][x-96] = ' ';
+                tab[novoY][novoX] = 'o' ;
+                tab[y][x] = ' ';
+                tab[y-1][x+1] = ' ';
                 pretas--;
 
 
@@ -127,23 +132,23 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
 
             else
             {
-                novamente(x,y,novoX,novoY, jogador);
-                movimento(x,y,novoX,novoY,jogador,brancas, pretas,tab);
+                novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+                movimento(a,b,A,B,jogador,brancas, pretas,tab);
             }
         }
 
         else
         {
-            novamente(x,y,novoX,novoY, jogador);
-            movimento(x,y,novoX,novoY,jogador,brancas, pretas,tab);
+            novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+            movimento(a,b,A,B,jogador,brancas, pretas,tab);
         }
 
 
     }
     else
     {
-        novamente(x,y,novoX,novoY, jogador);
-        movimento(x,y,novoX,novoY,jogador,brancas, pretas,tab);
+        novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+        movimento(a,b,A,B,jogador,brancas, pretas,tab);
     }
 
 }
@@ -174,9 +179,14 @@ int main()
                 ImprimeTabuleiro(tab);
                 cout << "Jogador 1 (x) , digite a peca que deseja mover (exemplo: b 3)" << endl;
                 cin >> x >> y;
+                a = (int)x - 97;
+                b = (int)y - 49;
                 cout << "Jogador 1 (x) , digite para onde peca deve ser movida (exemplo: b 3)" << endl;
                 cin >> novoX >> novoY;
-                movimento(x,y,novoX,novoY,1,brancas, pretas, tab);
+                A = (int)novoX - 97;
+                B = (int)novoY - 49;
+
+                movimento(a,b,A,B,1,brancas, pretas, tab);
                 ImprimeTabuleiro(tab);
                 if(brancas == 0)
                 {
@@ -184,9 +194,13 @@ int main()
                 }
                 cout << "Jogador 2 (o) , digite a peca que deseja mover (exemplo: b 3)" << endl;
                 cin >> x >> y;
+                a = (int)x - 97;
+                b = (int)y - 49;
                 cout << "Jogador 2 (o) , digite para onde peca deve ser movida (exemplo: b 3)" << endl;
                 cin >> novoX >> novoY;
-                movimento(x,y,novoX,novoY,2, brancas, pretas, tab);
+                A = (int)novoX - 97;
+                B = (int)novoY - 49;
+                movimento(a,b,A,B,2, brancas, pretas, tab);
             }
             system("cls");
             if(brancas == 0)
@@ -196,7 +210,12 @@ int main()
             break;
 
         // JOGADOR VS COMPUTADOR
-
+        case 2:
+            cin >> x >> y;
+            a = (int)x - 97;
+            b = (int)y - 49;
+            cout << a << " " << b << endl;
+        break;
 
 
         }
