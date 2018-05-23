@@ -7,6 +7,7 @@ char x,y,novoX,novoY;
 int brancas = 12;
 int pretas = 12;
 int a,b,A,B;
+char u,v;
 
 char tab[8][8]
 {
@@ -59,6 +60,7 @@ void novamente(char &x, char &y, char &novoX, char &novoY, int jogador,int &a,in
     B = (int)novoY - 49;
 
 }
+
 
 void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, int &pretas, char tab[8][8])
 {
@@ -117,7 +119,7 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
         }
 
         // PECA BRANCA (O)
-        else if(tab[y][x] == 'o' && jogador == 2)
+        else if(tab[y][x] == 'o' && (jogador == 2 || jogador == 3))
         {
             // Movimento simples para frente:
             if ( (novoY == (y-1)) && ((novoX == (x-1) || novoX == (x+1) ) &&  XY == ' '  ))
@@ -169,7 +171,11 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
 
             else
             {
+                if(jogador == 1 || jogador == 2){
                 novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+                }
+                
+
                 movimento(a,b,A,B,jogador,brancas, pretas,tab);
             }
         }
@@ -190,6 +196,54 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
 
 }
 
+bool chanceCaptura(char tab[8][8],int &compX, int &compY, int &newCompX, int &newCompY){
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j <8; j++){
+            if(tab[j][i] == 'o'){
+                // Esquerda e Frente
+                if(tab[j-1][i-1] == 'x' && tab[j-2][i-2] == ' ' ){
+                        compX = i;
+                        compY = j;
+                        newCompX = i-2;
+                        newCompY = j-2;
+                        return true;
+
+                }
+                // Direita e Frente
+               else if(tab[j-1][i+1] == 'x' && tab[j-2][i+2] == ' ' ){
+                        compX = i;
+                        compY = j;
+                        newCompX = i+2;
+                        newCompY = j-2;
+                        return true;
+
+                }
+                // Esquerda e para Trás
+                else if(tab[j+1][i-1] == 'x' && tab[j-2][i-2] == ' ' ){
+                        compX = i;
+                        compY = j;
+                        newCompX = i-2;
+                        newCompY = j-2;
+                        return true;
+
+                }
+                // direita e para Trás
+                else if(tab[j+1][i+1] == 'x' && tab[j-2][i+2] == ' ' ){
+                        compX = i;
+                        compY = j;
+                        newCompX = i+2;
+                        newCompY = j-2;
+                        return true;
+
+                }
+
+            }
+
+        }
+
+    }
+    return false;
+}
 
 
 
@@ -229,6 +283,11 @@ int main()
                 {
                     break;
                 }
+                if(chanceCaptura(tab, a, b, A, B)){
+                        u = a + 97;
+                        v = b + 49;
+                    cout << "EXISTE CHANCE DE CAPTURA EM:" << u << " " << v << endl;
+                }
                 cout << "Jogador 2 (o) , digite a peca que deseja mover (exemplo: b 3)" << endl;
                 cin >> x >> y;
                 a = (int)x - 97;
@@ -248,10 +307,20 @@ int main()
 
         // JOGADOR VS COMPUTADOR
         case 2:
-            cin >> x >> y;
-            a = (int)x - 97;
-            b = (int)y - 49;
-            cout << a << " " << b << endl;
+                system("cls");
+                ImprimeTabuleiro(tab);
+                cout << "Jogador 1 (x) , digite a peca que deseja mover (exemplo: b 3)" << endl;
+                cin >> x >> y;
+                a = (int)x - 97;
+                b = (int)y - 49;
+                cout << "Jogador 1 (x) , digite para onde peca deve ser movida (exemplo: b 3)" << endl;
+                cin >> novoX >> novoY;
+                A = (int)novoX - 97;
+                B = (int)novoY - 49;
+                movimento(a,b,A,B,1,brancas, pretas, tab);
+                ImprimeTabuleiro(tab);
+
+
         break;
 
 
