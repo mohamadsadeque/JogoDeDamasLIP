@@ -277,22 +277,22 @@ bool chanceCaptura(char tab[8][8],int &compX, int &compY, int &newCompX, int &ne
 
                 }
                 // Esquerda e para Trás
-                else if(tab[j+1][i-1] == 'x' && tab[j-2][i-2] == ' ' )
+                else if(tab[j+1][i-1] == 'x' && tab[j+2][i-2] == ' ' )
                 {
                     compX = i;
                     compY = j;
                     newCompX = i-2;
-                    newCompY = j-2;
+                    newCompY = j+2;
                     return true;
 
                 }
                 // direita e para Trás
-                else if(tab[j+1][i+1] == 'x' && tab[j-2][i+2] == ' ' )
+                else if(tab[j+1][i+1] == 'x' && tab[j+2][i+2] == ' ' )
                 {
                     compX = i;
                     compY = j;
                     newCompX = i+2;
-                    newCompY = j-2;
+                    newCompY = j+2;
                     return true;
 
                 }
@@ -365,7 +365,7 @@ int main()
         case 2:
             while(pretas > 0)
             {
-                system("cls");
+                //system("cls");
                 ImprimeTabuleiro(tab);
                 cout << "Jogador 1 (x) , digite a peca que deseja mover (exemplo: b 3)" << endl;
                 cin >> x >> y;
