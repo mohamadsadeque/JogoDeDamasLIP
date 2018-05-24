@@ -1,13 +1,13 @@
 #include <iostream>
 #include <stdlib.h>
-
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 int modo;
 char x,y,novoX,novoY;
 int brancas = 12;
 int pretas = 12;
-int a,b,A,B;
-char u,v;
+int a,b,A,B,sorte;
 
 char tab[8][8]
 {
@@ -61,6 +61,40 @@ void novamente(char &x, char &y, char &novoX, char &novoY, int jogador,int &a,in
 
 }
 
+void PCmove(char tab[8][8],int &a,int &b,int &A, int &B)
+{
+    a = rand()%9;
+    b = rand()%9;
+    while(tab[b][a] != 'o' || (tab[b-1][a-1] != ' ' && tab[b-1][a+1] != ' ' ))
+    {
+        a = rand()%9;
+        b = rand()%9;
+    }
+    if(tab[b-1][a-1] == ' ' && tab[b-1][a+1] == ' ' )
+    {
+        sorte = rand()%2;
+        B = b-1;
+        if(sorte == 0)
+        {
+            A = a+1;
+        }
+        else
+        {
+            A = a-1;
+        }
+    }
+    else if(tab[b-1][a-1] == ' ')
+    {
+        A = a-1;
+        B = b-1;
+    }
+    else
+    {
+        A = a+1;
+        B = b-1;
+    }
+
+}
 
 void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, int &pretas, char tab[8][8])
 {
@@ -171,10 +205,14 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
 
             else
             {
-                if(jogador == 1 || jogador == 2){
-                novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+                if(jogador == 1 || jogador == 2)
+                {
+                    novamente(x,y,novoX,novoY, jogador,a,b,A,B);
                 }
-                
+                else
+                {
+                    PCmove(tab,a,b,A,B);
+                }
 
                 movimento(a,b,A,B,jogador,brancas, pretas,tab);
             }
@@ -182,7 +220,14 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
 
         else
         {
-            novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+            if(jogador == 1 || jogador == 2)
+            {
+                novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+            }
+            else
+            {
+                PCmove(tab,a,b,A,B);
+            }
             movimento(a,b,A,B,jogador,brancas, pretas,tab);
         }
 
@@ -190,50 +235,65 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
     }
     else
     {
-        novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+        if(jogador == 1 || jogador == 2)
+        {
+            novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+        }
+        else
+        {
+            PCmove(tab,a,b,A,B);
+        }
         movimento(a,b,A,B,jogador,brancas, pretas,tab);
     }
 
 }
 
-bool chanceCaptura(char tab[8][8],int &compX, int &compY, int &newCompX, int &newCompY){
-    for(int i = 0; i < 8; i++){
-        for(int j = 0; j <8; j++){
-            if(tab[j][i] == 'o'){
+bool chanceCaptura(char tab[8][8],int &compX, int &compY, int &newCompX, int &newCompY)
+{
+    for(int i = 0; i < 8; i++)
+    {
+        for(int j = 0; j <8; j++)
+        {
+            if(tab[j][i] == 'o')
+            {
                 // Esquerda e Frente
-                if(tab[j-1][i-1] == 'x' && tab[j-2][i-2] == ' ' ){
-                        compX = i;
-                        compY = j;
-                        newCompX = i-2;
-                        newCompY = j-2;
-                        return true;
+                if(tab[j-1][i-1] == 'x' && tab[j-2][i-2] == ' ' )
+                {
+                    compX = i;
+                    compY = j;
+                    newCompX = i-2;
+                    newCompY = j-2;
+                    return true;
 
                 }
                 // Direita e Frente
-               else if(tab[j-1][i+1] == 'x' && tab[j-2][i+2] == ' ' ){
-                        compX = i;
-                        compY = j;
-                        newCompX = i+2;
-                        newCompY = j-2;
-                        return true;
+                else if(tab[j-1][i+1] == 'x' && tab[j-2][i+2] == ' ' )
+                {
+                    compX = i;
+                    compY = j;
+                    newCompX = i+2;
+                    newCompY = j-2;
+                    return true;
 
                 }
                 // Esquerda e para Trás
-                else if(tab[j+1][i-1] == 'x' && tab[j-2][i-2] == ' ' ){
-                        compX = i;
-                        compY = j;
-                        newCompX = i-2;
-                        newCompY = j-2;
-                        return true;
+                else if(tab[j+1][i-1] == 'x' && tab[j-2][i-2] == ' ' )
+                {
+                    compX = i;
+                    compY = j;
+                    newCompX = i-2;
+                    newCompY = j-2;
+                    return true;
 
                 }
                 // direita e para Trás
-                else if(tab[j+1][i+1] == 'x' && tab[j-2][i+2] == ' ' ){
-                        compX = i;
-                        compY = j;
-                        newCompX = i+2;
-                        newCompY = j-2;
-                        return true;
+                else if(tab[j+1][i+1] == 'x' && tab[j-2][i+2] == ' ' )
+                {
+                    compX = i;
+                    compY = j;
+                    newCompX = i+2;
+                    newCompY = j-2;
+                    return true;
 
                 }
 
@@ -249,6 +309,7 @@ bool chanceCaptura(char tab[8][8],int &compX, int &compY, int &newCompX, int &ne
 
 int main()
 {
+    srand(time(NULL));
     while(1)
     {
         cout << "Digite a opção que deseja: " << endl;
@@ -283,11 +344,6 @@ int main()
                 {
                     break;
                 }
-                if(chanceCaptura(tab, a, b, A, B)){
-                        u = a + 97;
-                        v = b + 49;
-                    cout << "EXISTE CHANCE DE CAPTURA EM:" << u << " " << v << endl;
-                }
                 cout << "Jogador 2 (o) , digite a peca que deseja mover (exemplo: b 3)" << endl;
                 cin >> x >> y;
                 a = (int)x - 97;
@@ -307,6 +363,8 @@ int main()
 
         // JOGADOR VS COMPUTADOR
         case 2:
+            while(pretas > 0)
+            {
                 system("cls");
                 ImprimeTabuleiro(tab);
                 cout << "Jogador 1 (x) , digite a peca que deseja mover (exemplo: b 3)" << endl;
@@ -317,11 +375,31 @@ int main()
                 cin >> novoX >> novoY;
                 A = (int)novoX - 97;
                 B = (int)novoY - 49;
+
                 movimento(a,b,A,B,1,brancas, pretas, tab);
                 ImprimeTabuleiro(tab);
+                if(brancas == 0)
+                {
+                    break;
+                }
+                if(chanceCaptura(tab,a,b,A,B))
+                {
+                    movimento(a,b,A,B,3, brancas, pretas, tab);
+                }
+                else
+                {
+                    PCmove(tab,a,b,A,B);
+                    movimento(a,b,A,B,3, brancas, pretas, tab);
+                }
+            }
+            system("cls");
+            if(brancas == 0)
+                cout<< "PRETAS GANHARAM" << endl;
+            else
+                cout << "BRANCAS GANHARAM " << endl;
 
 
-        break;
+            break;
 
 
         }
