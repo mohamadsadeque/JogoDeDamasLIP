@@ -1,13 +1,15 @@
 #include <iostream>
 #include <stdlib.h>
-
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 int modo;
 char x,y,novoX,novoY;
 int brancas = 12;
 int pretas = 12;
-int a,b,A,B;
-
+int a,b,A,B,sorte;
+int decide;
+char u,v,w,z;
 char tab[8][8]
 {
     {'#','x','#','x','#','x','#','x'},
@@ -48,7 +50,7 @@ void novamente(char &x, char &y, char &novoX, char &novoY, int jogador,int &a,in
 {
     system("cls");
     ImprimeTabuleiro(tab);
-    cout << "Nao é possivel efetuar a jogada!, digite novamente: \n" << endl;
+    cout << "Nao e possivel efetuar a jogada!, digite novamente: \n" << endl;
     cout << "Jogador " <<  jogador << " , digite a peca que deseja mover (exemplo: b 3)" << endl;
     cin >> x >> y;
     cout << "Jogador " <<  jogador << " , digite o local que a peca irá se mover (exemplo: c 4)" << endl;
@@ -59,6 +61,81 @@ void novamente(char &x, char &y, char &novoX, char &novoY, int jogador,int &a,in
     B = (int)novoY - 49;
 
 }
+
+void PCmove(char tab[8][8],int &a,int &b,int &A, int &B)
+{
+    a = rand()%9;
+    b = rand()%9;
+    while(tab[b][a] != 'o' || (tab[b-1][a-1] != ' ' && tab[b-1][a+1] != ' ' ))
+    {
+        a = rand()%9;
+        b = rand()%9;
+    }
+    if(tab[b-1][a-1] == ' ' && tab[b-1][a+1] == ' ' )
+    {
+        sorte = rand()%100;
+        B = b-1;
+        if(sorte%2 == 0)
+        {
+            A = a+1;
+        }
+        else
+        {
+            A = a-1;
+        }
+    }
+    else if(tab[b-1][a-1] == ' ')
+    {
+        A = a-1;
+        B = b-1;
+    }
+    else
+    {
+        A = a+1;
+        B = b-1;
+    }
+
+}
+
+bool novaCaptura(char tab[8][8],int jogador, char &a , char &b, char &A, char &B){
+         if( ((jogador == 1 && tab[b-1][a-1] == 'o') || ( ((jogador == 2)||(jogador == 3)) && tab[b-1][a-1] == 'x') ) && tab[b-2][a-2] == ' ' )
+                {
+                    B = b - 2;
+                    A = a - 2;
+                    return true;
+
+                }
+
+                else if(((jogador == 1 && tab[b-1][a+1] == 'o') || ( ((jogador == 2)||(jogador == 3)) && tab[b-1][a+1] == 'x') ) && tab[b-2][a+2] == ' ' )
+                {
+                    B = b - 2;
+                    A = a + 2;
+                    return true;
+
+                }
+                else if(((jogador == 1 && tab[b+1][a-1] == 'o') || ( ((jogador == 2)||(jogador == 3)) && tab[b+1][a-1] == 'x') )  && tab[b+2][a-2] == ' ' )
+                {
+                    B = b + 2;
+                    A = a - 2;
+                    return true;
+
+                }
+                else if(((jogador == 1 && tab[b+1][a+1] == 'o') || ( ((jogador == 2)||(jogador == 3)) && tab[b+1][a+1] == 'x') ) && tab[b+2][a+2] == ' ' )
+                {
+                    B = b + 2;
+                    A = a + 2;
+                    return true;
+
+                }
+                else
+                    return false;
+
+
+
+
+
+}
+
 
 void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, int &pretas, char tab[8][8])
 {
@@ -71,25 +148,95 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
             // Movimento simples para frente:
             if ( (novoY == (y+1)) && ((novoX == (x-1) || novoX == (x+1) ) &&  XY == ' ' ))
             {
+
                 tab[novoY][novoX] = tab[y][x];
                 tab[y][x] = ' ';
             }
-            // Captura pela esquerda
+            // Captura pela esquerda para frente
             else if( ( tab[y+1][x-1] == 'o' ) && ((novoY == (y+2)) && novoX == (x-2)) && XY == ' '  )
             {
                 tab[novoY][novoX] = 'x' ;
                 tab[y][x] = ' ';
                 tab[y+1][x-1] = ' ';
                 brancas--;
+                if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
+                    if(jogador == 1 || jogador == 2){
+                    cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
+                    cin >> decide;
+                    if(decide == 1)
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+
+                }
+                    else{
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+                    }
+                }
 
             }
-            // Captura pela direita
+            // Captura pela direita para frente
             else if( ( tab[y+1][x+1] == 'o' ) && ((novoY == (y+2)) && novoX == (x+2)) && XY == ' '  )
             {
                 tab[novoY][novoX] = 'x' ;
                 tab[y][x] = ' ';
                 tab[y+1][x+1] = ' ';
                 brancas--;
+                 if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
+                    if(jogador == 1 || jogador == 2){
+                    cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
+                    cin >> decide;
+                    if(decide == 1)
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+
+                }
+                    else{
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+                    }
+                }
+
+            }
+            // Captura pela esquerda para tras
+            else if( ( tab[y-1][x-1] == 'o' ) && ((novoY == (y-2)) && novoX == (x-2)) && XY == ' '  )
+            {
+                tab[novoY][novoX] = 'x' ;
+                tab[y][x] = ' ';
+                tab[y-1][x-1] = ' ';
+                brancas--;
+                if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
+                    if(jogador == 1 || jogador == 2){
+                    cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
+                    cin >> decide;
+                    if(decide == 1)
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+
+                }
+                    else{
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+                    }
+                }
+
+
+
+            }
+            // Captura pela direita para tras
+            else if( ( tab[y-1][x+1] == 'o' ) && ((novoY == (y-2)) && novoX == (x+2)) && XY == ' '  )
+            {
+                tab[novoY][novoX] = 'x' ;
+                tab[y][x] = ' ';
+                tab[y-1][x+1] = ' ';
+                brancas--;
+                 if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
+                    if(jogador == 1 || jogador == 2){
+                    cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
+                    cin >> decide;
+                    if(decide == 1)
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+
+                }
+                    else{
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+                    }
+                }
+
             }
             else
             {
@@ -100,11 +247,18 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
         }
 
         // PECA BRANCA (O)
-        else if(tab[y][x] == 'o' && jogador == 2)
+        else if(tab[y][x] == 'o' && (jogador == 2 || jogador == 3))
         {
             // Movimento simples para frente:
             if ( (novoY == (y-1)) && ((novoX == (x-1) || novoX == (x+1) ) &&  XY == ' '  ))
             {
+                if(jogador == 3){
+                u = x + 97;
+                v = y +49;
+                w = novoX + 97;
+                z = novoY + 49;
+                cout << "Computador fez um movimento simples:" <<  u  << v << " para " << w << z << endl;
+                }
                 tab[novoY][novoX] = tab[y][x];
                 tab[y][x] = ' ';
 
@@ -112,34 +266,149 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
             // Captura pela esquerda
             else if( ( tab[y-1][x-1] == 'x' ) && ((novoY == (y-2)) && novoX == (x-2)) && XY == ' '  )
             {
+                 if(jogador == 3){
+                u = x + 97;
+                v = y +49;
+                w = novoX + 97;
+                z = novoY + 49;
+                cout << "Computador fez uma captura:" <<  u  << v << " para " << w << z << endl;
+                }
                 tab[novoY][novoX] = 'o' ;
                 tab[y][x] = ' ';
                 tab[y-1][x-1] = ' ';
                 pretas--;
+                if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
+                    if(jogador == 1 || jogador == 2){
+                    cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
+                    cin >> decide;
+                    if(decide == 1)
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+
+                }
+                    else{
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+                    }
+                }
+
 
             }
 
             // Captura pela direita
             else if( ( tab[y-1][x+1] == 'x' ) && ((novoY == (y-2)) && novoX == (x+2)) && XY == ' '  )
             {
+                if(jogador == 3){
+                u = x + 97;
+                v = y +49;
+                w = novoX + 97;
+                z = novoY + 49;
+                cout << "Computador fez uma captura:" <<  u  << v << " para " << w << z << endl;
+                }
                 tab[novoY][novoX] = 'o' ;
                 tab[y][x] = ' ';
                 tab[y-1][x+1] = ' ';
                 pretas--;
+                if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
+                    if(jogador == 1 || jogador == 2){
+                    cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
+                    cin >> decide;
+                    if(decide == 1)
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+
+                }
+                    else{
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+                    }
+                }
+
+
+
+            }
+            // Captura pela esquerda para tras
+            else if( ( tab[y+1][x-1] == 'x' ) && ((novoY == (y+2)) && novoX == (x-2)) && XY == ' '  )
+            {
+                if(jogador == 3){
+                u = x + 97;
+                v = y +49;
+                w = novoX + 97;
+                z = novoY + 49;
+                cout << "Computador fez uma captura:" <<  u  << v << " para " << w << z << endl;
+                }
+                tab[novoY][novoX] = 'o' ;
+                tab[y][x] = ' ';
+                tab[y+1][x-1] = ' ';
+                pretas--;
+                if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
+                    if(jogador == 1 || jogador == 2){
+                    cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
+                    cin >> decide;
+                    if(decide == 1)
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+
+                }
+                    else{
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+                    }
+                }
+
+
+            }
+
+            // Captura pela direita para tras
+            else if( ( tab[y+1][x+1] == 'x' ) && ((novoY == (y+2)) && novoX == (x+2)) && XY == ' '  )
+            {
+                if(jogador == 3){
+                u = x + 97;
+                v = y +49;
+                w = novoX + 97;
+                z = novoY + 49;
+                cout << "Computador fez uma captura:" <<  u  << v << " para " << w << z << endl;
+                }
+                tab[novoY][novoX] = 'o' ;
+                tab[y][x] = ' ';
+                tab[y+1][x+1] = ' ';
+                pretas--;
+              if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
+                    if(jogador == 1 || jogador == 2){
+                    cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
+                    cin >> decide;
+                    if(decide == 1)
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+
+                }
+                    else{
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
+                    }
+                }
+
 
 
             }
 
             else
             {
-                novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+                if(jogador == 1 || jogador == 2)
+                {
+                    novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+                }
+                else
+                {
+                    PCmove(tab,a,b,A,B);
+                }
+
                 movimento(a,b,A,B,jogador,brancas, pretas,tab);
             }
         }
 
         else
         {
-            novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+            if(jogador == 1 || jogador == 2)
+            {
+                novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+            }
+            else
+            {
+                PCmove(tab,a,b,A,B);
+            }
             movimento(a,b,A,B,jogador,brancas, pretas,tab);
         }
 
@@ -147,17 +416,81 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
     }
     else
     {
-        novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+        if(jogador == 1 || jogador == 2)
+        {
+            novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+        }
+        else
+        {
+            PCmove(tab,a,b,A,B);
+        }
         movimento(a,b,A,B,jogador,brancas, pretas,tab);
     }
 
 }
 
+bool chanceCaptura(char tab[8][8],int &compX, int &compY, int &newCompX, int &newCompY)
+{
+    for(int i = 0; i < 8; i++)
+    {
+        for(int j = 0; j <8; j++)
+        {
+            if(tab[j][i] == 'o')
+            {
+                // Esquerda e Frente
+                if(tab[j-1][i-1] == 'x' && tab[j-2][i-2] == ' ' )
+                {
+                    compX = i;
+                    compY = j;
+                    newCompX = i-2;
+                    newCompY = j-2;
+                    return true;
+
+                }
+                // Direita e Frente
+                else if(tab[j-1][i+1] == 'x' && tab[j-2][i+2] == ' ' )
+                {
+                    compX = i;
+                    compY = j;
+                    newCompX = i+2;
+                    newCompY = j-2;
+                    return true;
+
+                }
+                // Esquerda e para Trás
+                else if(tab[j+1][i-1] == 'x' && tab[j+2][i-2] == ' ' )
+                {
+                    compX = i;
+                    compY = j;
+                    newCompX = i-2;
+                    newCompY = j+2;
+                    return true;
+
+                }
+                // direita e para Trás
+                else if(tab[j+1][i+1] == 'x' && tab[j+2][i+2] == ' ' )
+                {
+                    compX = i;
+                    compY = j;
+                    newCompX = i+2;
+                    newCompY = j+2;
+                    return true;
+
+                }
+
+            }
+
+        }
+
+    }
+    return false;
+}
 
 
 
 int main()
 {
+    srand(time(NULL));
     while(1)
     {
         cout << "Digite a opção que deseja: " << endl;
@@ -211,11 +544,75 @@ int main()
 
         // JOGADOR VS COMPUTADOR
         case 2:
-            cin >> x >> y;
-            a = (int)x - 97;
-            b = (int)y - 49;
-            cout << a << " " << b << endl;
-        break;
+            while(pretas > 0)
+            {
+                //system("cls");
+                ImprimeTabuleiro(tab);
+                cout << "Jogador 1 (x) , digite a peca que deseja mover (exemplo: b 3)" << endl;
+                cin >> x >> y;
+                a = (int)x - 97;
+                b = (int)y - 49;
+                cout << "Jogador 1 (x) , digite para onde peca deve ser movida (exemplo: b 3)" << endl;
+                cin >> novoX >> novoY;
+                A = (int)novoX - 97;
+                B = (int)novoY - 49;
+
+                movimento(a,b,A,B,1,brancas, pretas, tab);
+                cout << "\n Movimento do Jogador: \n" << endl;
+                ImprimeTabuleiro(tab);
+                if(brancas == 0)
+                {
+                    break;
+                }
+                if(chanceCaptura(tab,a,b,A,B))
+                {
+
+                    movimento(a,b,A,B,3, brancas, pretas, tab);
+                    cout << "\n Movimento do Computador: \n" << endl;
+                }
+                else
+                {
+                    PCmove(tab,a,b,A,B);
+                    movimento(a,b,A,B,3, brancas, pretas, tab);
+                    cout << "\n Movimento do Computador: \n" << endl;
+
+                }
+            }
+            
+            if(brancas == 0)
+cout<<"  _____    _____    ______   _______               _____                 "<<endl;            
+cout<<" |  __ \  |  __ \  |  ____| |__   __|     /\      / ____|                 "<<endl;    
+cout<<" | |__) | | |__) | | |__       | |       /  \    | (___                    "<<endl;
+cout<<" |  ___/  |  _  /  |  __|      | |      / /\ \    \___ \                   "<<endl;
+cout<<" | |      | | \ \  | |____     | |     / ____ \   ____) |                  "<<endl;
+cout<<" |_|      |_|  \_\ |______|    |_|    /_/    \_\ |_____/                   "<<endl;
+  cout<< "/n"<<endl;
+cout << " __      __  ______   _   _    _____   ______   _____               __  __"<<endl;
+cout << " \ \    / / |  ____| | \ | |  / ____| |  ____| |  __ \      /\     |  \/  |"<<endl;
+cout << "  \ \  / /  | |__    |  \| | | |      | |__    | |__) |    /  \    | \  / |"<<endl;
+cout << "   \ \/ /   |  __|   | . ` | | |      |  __|   |  _  /    / /\ \   | |\/| |"<<endl;
+cout << "    \  /    | |____  | |\  | | |____  | |____  | | \ \   / ____ \  | |  | |"<<endl;
+cout << "     \/     |______| |_| \_|  \_____| |______| |_|  \_\ /_/    \_\ |_|  |_|"<<endl;
+                                                         
+            else
+cout << "  ____    _____               _   _    _____               _____           "<<endl;
+ cout << "|  _ \  |  __ \      /\     | \ | |  / ____|     /\      / ____|          "<<endl;
+ cout << "| |_) | | |__) |    /  \    |  \| | | |         /  \    | (___            "<<endl;
+ cout << "|  _ <  |  _  /    / /\ \   | . ` | | |        / /\ \    \___ \           "<<endl;
+ cout << "| |_) | | | \ \   / ____ \  | |\  | | |____   / ____ \   ____) |          "<<endl;
+ cout << "|____/  |_|  \_\ /_/    \_\ |_| \_|  \_____| /_/    \_\ |_____/           "<<endl;
+cout<< "/n"<<endl;                                                                         
+                                                                        
+cout << " __      __  ______   _   _    _____   ______   _____               __  __ "<<endl;
+cout << " \ \    / / |  ____| | \ | |  / ____| |  ____| |  __ \      /\     |  \/  |"<<endl;
+cout << "  \ \  / /  | |__    |  \| | | |      | |__    | |__) |    /  \    | \  / |"<<endl;
+cout << "   \ \/ /   |  __|   | . ` | | |      |  __|   |  _  /    / /\ \   | |\/| |"<<endl;
+cout << "    \  /    | |____  | |\  | | |____  | |____  | | \ \   / ____ \  | |  | |"<<endl;
+cout << "     \/     |______| |_| \_|  \_____| |______| |_|  \_\ /_/    \_\ |_|  |_|"<<endl;
+                                                                          
+
+
+            break;
 
 
         }
