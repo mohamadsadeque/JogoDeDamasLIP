@@ -14,8 +14,8 @@ char tab[8][8]
 {
     {'#','x','#','x','#','x','#','x'},
     {'x','#','x','#','x','#','x','#'},
-    {'#','x','#','x','#','x','#','x'},
-    {' ','#','x','#',' ','#',' ','#'},
+    {'#','x','#',' ','#','x','#','x'},
+    {' ','#','x','#','x','#',' ','#'},
     {'#',' ','#','o','#','o','#',' '},
     {'o','#','o','#',' ','#','o','#'},
     {'#','o','#','o','#','o','#','o'},
@@ -97,7 +97,7 @@ void PCmove(char tab[8][8],int &a,int &b,int &A, int &B)
 
 }
 
-bool novaCaptura(char tab[8][8],int jogador, int &a , int &b, int &A, int &B){
+bool novaCaptura(char tab[8][8],int jogador, char &a , char &b, char &A, char &B){
          if( ((jogador == 1 && tab[b-1][a-1] == 'o') || ( ((jogador == 2)||(jogador == 3)) && tab[b-1][a-1] == 'x') ) && tab[b-2][a-2] == ' ' )
                 {
                     B = b - 2;
@@ -158,16 +158,16 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                 tab[y][x] = ' ';
                 tab[y+1][x-1] = ' ';
                 brancas--;
-                if(novaCaptura(tab,jogador,a,b,A,B)){
+                if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
                     if(jogador == 1 || jogador == 2){
                     cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
                     cin >> decide;
                     if(decide == 1)
-                        movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
 
                 }
                     else{
-                       movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
                     }
                 }
 
@@ -179,18 +179,19 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                 tab[y][x] = ' ';
                 tab[y+1][x+1] = ' ';
                 brancas--;
-                if(novaCaptura(tab,jogador,A, B, a,b )){
+                 if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
                     if(jogador == 1 || jogador == 2){
                     cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
                     cin >> decide;
                     if(decide == 1)
-                        movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
 
                 }
                     else{
-                       movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
                     }
                 }
+
             }
             // Captura pela esquerda para tras
             else if( ( tab[y-1][x-1] == 'o' ) && ((novoY == (y-2)) && novoX == (x-2)) && XY == ' '  )
@@ -199,18 +200,19 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                 tab[y][x] = ' ';
                 tab[y-1][x-1] = ' ';
                 brancas--;
-                if(novaCaptura(tab,jogador,A, B, a,b)){
+                if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
                     if(jogador == 1 || jogador == 2){
                     cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
                     cin >> decide;
                     if(decide == 1)
-                        movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
 
                 }
                     else{
-                       movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
                     }
                 }
+
 
 
             }
@@ -221,18 +223,19 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                 tab[y][x] = ' ';
                 tab[y-1][x+1] = ' ';
                 brancas--;
-                if(novaCaptura(tab,jogador,A, B, a,b)){
+                 if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
                     if(jogador == 1 || jogador == 2){
                     cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
                     cin >> decide;
                     if(decide == 1)
-                        movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
 
                 }
                     else{
-                       movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
                     }
                 }
+
             }
             else
             {
@@ -259,18 +262,19 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                 tab[y][x] = ' ';
                 tab[y-1][x-1] = ' ';
                 pretas--;
-                if(novaCaptura(tab,jogador,A, B, a,b)){
+                if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
                     if(jogador == 1 || jogador == 2){
                     cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
                     cin >> decide;
                     if(decide == 1)
-                        movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
 
                 }
                     else{
-                       movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
                     }
                 }
+
 
             }
 
@@ -281,18 +285,19 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                 tab[y][x] = ' ';
                 tab[y-1][x+1] = ' ';
                 pretas--;
-                if(novaCaptura(tab,jogador,A, B, a,b)){
+                if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
                     if(jogador == 1 || jogador == 2){
                     cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
                     cin >> decide;
                     if(decide == 1)
-                        movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
 
                 }
                     else{
-                       movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
                     }
                 }
+
 
 
             }
@@ -303,18 +308,19 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                 tab[y][x] = ' ';
                 tab[y+1][x-1] = ' ';
                 pretas--;
-                if(novaCaptura(tab,jogador,A, B, a,b)){
+                if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
                     if(jogador == 1 || jogador == 2){
                     cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
                     cin >> decide;
                     if(decide == 1)
-                        movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
 
                 }
                     else{
-                       movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
                     }
                 }
+
 
             }
 
@@ -325,18 +331,19 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                 tab[y][x] = ' ';
                 tab[y+1][x+1] = ' ';
                 pretas--;
-                if(novaCaptura(tab,jogador,A, B, a,b)){
+              if(novaCaptura(tab,jogador,novoX,novoY,x,y)){
                     if(jogador == 1 || jogador == 2){
                     cout << "NOVA CHANCE DE CAPTURA, DESEJA CAPTURAR? sim(1) ou nao(2)" << endl;
                     cin >> decide;
                     if(decide == 1)
-                        movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
 
                 }
                     else{
-                       movimento(a,b,A,B,jogador,brancas,pretas,tab);
+                       movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
                     }
                 }
+
 
 
             }
