@@ -9,7 +9,7 @@ int brancas = 12;
 int pretas = 12;
 int a,b,A,B,sorte;
 int decide;
-
+char u,v,w,z;
 char tab[8][8]
 {
     {'#','x','#','x','#','x','#','x'},
@@ -148,6 +148,7 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
             // Movimento simples para frente:
             if ( (novoY == (y+1)) && ((novoX == (x-1) || novoX == (x+1) ) &&  XY == ' ' ))
             {
+
                 tab[novoY][novoX] = tab[y][x];
                 tab[y][x] = ' ';
             }
@@ -251,6 +252,13 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
             // Movimento simples para frente:
             if ( (novoY == (y-1)) && ((novoX == (x-1) || novoX == (x+1) ) &&  XY == ' '  ))
             {
+                if(jogador == 3){
+                u = x + 97;
+                v = y +49;
+                w = novoX + 97;
+                z = novoY + 49;
+                cout << "Computador fez um movimento simples:" <<  u  << v << " para " << w << z << endl;
+                }
                 tab[novoY][novoX] = tab[y][x];
                 tab[y][x] = ' ';
 
@@ -258,6 +266,13 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
             // Captura pela esquerda
             else if( ( tab[y-1][x-1] == 'x' ) && ((novoY == (y-2)) && novoX == (x-2)) && XY == ' '  )
             {
+                 if(jogador == 3){
+                u = x + 97;
+                v = y +49;
+                w = novoX + 97;
+                z = novoY + 49;
+                cout << "Computador fez uma captura:" <<  u  << v << " para " << w << z << endl;
+                }
                 tab[novoY][novoX] = 'o' ;
                 tab[y][x] = ' ';
                 tab[y-1][x-1] = ' ';
@@ -281,6 +296,13 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
             // Captura pela direita
             else if( ( tab[y-1][x+1] == 'x' ) && ((novoY == (y-2)) && novoX == (x+2)) && XY == ' '  )
             {
+                if(jogador == 3){
+                u = x + 97;
+                v = y +49;
+                w = novoX + 97;
+                z = novoY + 49;
+                cout << "Computador fez uma captura:" <<  u  << v << " para " << w << z << endl;
+                }
                 tab[novoY][novoX] = 'o' ;
                 tab[y][x] = ' ';
                 tab[y-1][x+1] = ' ';
@@ -304,6 +326,13 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
             // Captura pela esquerda para tras
             else if( ( tab[y+1][x-1] == 'x' ) && ((novoY == (y+2)) && novoX == (x-2)) && XY == ' '  )
             {
+                if(jogador == 3){
+                u = x + 97;
+                v = y +49;
+                w = novoX + 97;
+                z = novoY + 49;
+                cout << "Computador fez uma captura:" <<  u  << v << " para " << w << z << endl;
+                }
                 tab[novoY][novoX] = 'o' ;
                 tab[y][x] = ' ';
                 tab[y+1][x-1] = ' ';
@@ -327,6 +356,13 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
             // Captura pela direita para tras
             else if( ( tab[y+1][x+1] == 'x' ) && ((novoY == (y+2)) && novoX == (x+2)) && XY == ' '  )
             {
+                if(jogador == 3){
+                u = x + 97;
+                v = y +49;
+                w = novoX + 97;
+                z = novoY + 49;
+                cout << "Computador fez uma captura:" <<  u  << v << " para " << w << z << endl;
+                }
                 tab[novoY][novoX] = 'o' ;
                 tab[y][x] = ' ';
                 tab[y+1][x+1] = ' ';
