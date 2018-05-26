@@ -18,8 +18,8 @@ char tab[8][8]
     {' ','#',' ','#',' ','#',' ','#'},
     {'#',' ','#',' ','#',' ','#',' '},
     {'o','#','o','#','o','#','o','#'},
-    {'#','o','#','o','#','o','#','o'},
-    {'o','#','o','#','o','#','o','#'},
+    {'#','o','#','x','#','o','#','o'},
+    {'o','#','o','#',' ','#','o','#'},
 };
 
 void ImprimeTabuleiro(char tab[8][8])
@@ -137,6 +137,8 @@ bool novaCaptura(char tab[8][8],int jogador, char &a , char &b, char &A, char &B
 }
 
 
+
+
 void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, int &pretas, char tab[8][8])
 {
     char XY = tab[novoY][novoX];
@@ -148,9 +150,12 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
             // Movimento simples para frente:
             if ( (novoY == (y+1)) && ((novoX == (x-1) || novoX == (x+1) ) &&  XY == ' ' ))
             {
-
                 tab[novoY][novoX] = tab[y][x];
                 tab[y][x] = ' ';
+                if(novoY == 7){
+                    tab[novoY][novoX] = 'X';
+                }
+
             }
             // Captura pela esquerda para frente
             else if( ( tab[y+1][x-1] == 'o' ) && ((novoY == (y+2)) && novoX == (x-2)) && XY == ' '  )
@@ -170,6 +175,9 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                     else{
                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
                     }
+                }
+                if(novoY == 7){
+                    tab[novoY][novoX] = 'X';
                 }
 
             }
@@ -192,6 +200,9 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
                     }
                 }
+                if(novoY == 7){
+                    tab[novoY][novoX] = 'X';
+                }
 
             }
             // Captura pela esquerda para tras
@@ -213,8 +224,9 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
                     }
                 }
-
-
+                if(novoY == 7){
+                    tab[novoY][novoX] = 'X';
+                }
 
             }
             // Captura pela direita para tras
@@ -235,6 +247,9 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                     else{
                        movimento(novoX,novoY,x,y,jogador,brancas,pretas,tab);
                     }
+                }
+                if(novoY == 7){
+                    tab[novoY][novoX] = 'X';
                 }
 
             }
@@ -261,6 +276,7 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                 }
                 tab[novoY][novoX] = tab[y][x];
                 tab[y][x] = ' ';
+
 
             }
             // Captura pela esquerda
@@ -578,10 +594,10 @@ int main()
 
                 }
             }
-            
-            if(brancas == 0)
-cout<<"  _____    _____    ______   _______               _____                 "<<endl;            
-cout<<" |  __ \  |  __ \  |  ____| |__   __|     /\      / ____|                 "<<endl;    
+
+            if(brancas == 0){
+cout<<"  _____    _____    ______   _______               _____                 "<<endl;
+cout<<" |  __ \  |  __ \  |  ____| |__   __|     /\      / ____|                 "<<endl;
 cout<<" | |__) | | |__) | | |__       | |       /  \    | (___                    "<<endl;
 cout<<" |  ___/  |  _  /  |  __|      | |      / /\ \    \___ \                   "<<endl;
 cout<<" | |      | | \ \  | |____     | |     / ____ \   ____) |                  "<<endl;
@@ -593,26 +609,26 @@ cout << "  \ \  / /  | |__    |  \| | | |      | |__    | |__) |    /  \    | \ 
 cout << "   \ \/ /   |  __|   | . ` | | |      |  __|   |  _  /    / /\ \   | |\/| |"<<endl;
 cout << "    \  /    | |____  | |\  | | |____  | |____  | | \ \   / ____ \  | |  | |"<<endl;
 cout << "     \/     |______| |_| \_|  \_____| |______| |_|  \_\ /_/    \_\ |_|  |_|"<<endl;
-                                                         
-            else
+            }
+
+            else{
 cout << "  ____    _____               _   _    _____               _____           "<<endl;
  cout << "|  _ \  |  __ \      /\     | \ | |  / ____|     /\      / ____|          "<<endl;
  cout << "| |_) | | |__) |    /  \    |  \| | | |         /  \    | (___            "<<endl;
  cout << "|  _ <  |  _  /    / /\ \   | . ` | | |        / /\ \    \___ \           "<<endl;
  cout << "| |_) | | | \ \   / ____ \  | |\  | | |____   / ____ \   ____) |          "<<endl;
  cout << "|____/  |_|  \_\ /_/    \_\ |_| \_|  \_____| /_/    \_\ |_____/           "<<endl;
-cout<< "/n"<<endl;                                                                         
-                                                                        
+cout<< "/n"<<endl;
+
 cout << " __      __  ______   _   _    _____   ______   _____               __  __ "<<endl;
 cout << " \ \    / / |  ____| | \ | |  / ____| |  ____| |  __ \      /\     |  \/  |"<<endl;
 cout << "  \ \  / /  | |__    |  \| | | |      | |__    | |__) |    /  \    | \  / |"<<endl;
 cout << "   \ \/ /   |  __|   | . ` | | |      |  __|   |  _  /    / /\ \   | |\/| |"<<endl;
 cout << "    \  /    | |____  | |\  | | |____  | |____  | | \ \   / ____ \  | |  | |"<<endl;
 cout << "     \/     |______| |_| \_|  \_____| |______| |_|  \_\ /_/    \_\ |_|  |_|"<<endl;
-                                                                          
 
+            }
 
-            break;
 
 
         }
