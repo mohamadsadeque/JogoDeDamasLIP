@@ -18,8 +18,8 @@ char tab[8][8]
     {' ','#',' ','#',' ','#',' ','#'},
     {'#',' ','#',' ','#',' ','#',' '},
     {'o','#','o','#','o','#','o','#'},
-    {'#','o','#','x','#','o','#','o'},
-    {'o','#','o','#',' ','#','o','#'},
+    {'#','o','#','o','#','o','#','o'},
+    {'o','#','o','#','o','#','o','#'},
 };
 
 void ImprimeTabuleiro(char tab[8][8])
@@ -136,17 +136,140 @@ bool novaCaptura(char tab[8][8],int jogador, char &a , char &b, char &A, char &B
 
 }
 
+bool diagonalDama(char tab[8][8], char x, char y, char novoX, char novoY,int jogador, int &brancas, int &pretas)
+{
+    int diagonal;
+    int flag = 1;
 
+    if(tab[novoY][novoX] == ' ')
+    {
+
+        if(jogador == 1){
+
+        for(int i =1; i < 8; i++ )
+        {
+                if( ((novoX == x+i)&&(novoY==y+i)) )
+                {
+                    diagonal = novoY - y;
+                    for(int j = 1; j <= diagonal; j++)
+                    {
+                        if(tab[y+j][x+j] == 'x' ||tab[y+j][x+j] == 'X')
+                        {
+                            flag = 0;
+                        }
+                    }
+                    if(flag == 1){
+                        for(int k = 1; k < diagonal; k++){
+                            if( (tab[y+k][x+k] == 'o') || (tab[y+k][x+k] == 'O')  ){
+                                tab[y+k][x+k] = ' ';
+                                brancas--;
+                            }
+                        }
+                    }
+                    else
+                        return false;
+
+                }
+                else if(((novoX == x-i)&&(novoY==y+i)))
+                {
+                    diagonal = novoY - y;
+                    for(int j = 1; j <= diagonal; j++)
+                    {
+                        if(tab[y+j][x-j] == 'x' ||tab[y+j][x-j] == 'X')
+                        {
+                            flag = 0;
+                        }
+                    }
+                    if(flag == 1){
+                        for(int k = 1; k <= diagonal; k++){
+                            if( (tab[y+k][x-k] == 'o') || (tab[y+k][x-k] == 'O')  ){
+                                tab[y+k][x-k] = ' ';
+                                brancas--;
+                            }
+                        }
+                    }
+                    else
+                        return false;
+
+
+                }
+                else if(((novoX == x-i)&&(novoY==y-i)))
+                {
+                    diagonal = y - novoY;
+                    for(int j = 1; j <= diagonal; j++)
+                    {
+                        if(tab[y-j][x-j] == 'x' ||tab[y-j][x-j] == 'X')
+                        {
+                            flag = 0;
+                        }
+                    }
+                    if(flag == 1){
+                        for(int k = 1; k <= diagonal; k++){
+                            if( (tab[y-k][x-k] == 'o') || (tab[y-k][x-k] == 'O')  ){
+                                tab[y-k][x-k] = ' ';
+                                brancas--;
+                            }
+                        }
+                    }
+                    else
+                        return false;
+
+                }
+            else if(((novoX == x+i)&&(novoY==y-i)))
+            {
+                diagonal = y - novoY;
+                    for(int j = 1; j <= diagonal; j++)
+                    {
+                        if(tab[y-j][x+j] == 'x' ||tab[y-j][x+j] == 'X')
+                        {
+                            flag = 0;
+                        }
+                    }
+                    if(flag == 1){
+                        for(int k = 1; k <= diagonal; k++){
+                            if( (tab[y-k][x+k] == 'o') || (tab[y-k][x+k] == 'O')  ){
+                                tab[y-k][x+k] = ' ';
+                                brancas--;
+                            }
+                        }
+                    }
+                    else
+                        return false;
+
+            }
+            else
+            {
+                return false;
+            }
+        }
+        }
+    }
+    else
+        return false;
+
+}
 
 
 void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, int &pretas, char tab[8][8])
 {
     char XY = tab[novoY][novoX];
-    if(( x >= 0 && x <= 8) &&  (y >= 0 && y <= 8 ) && ( novoX >= 0 && novoX <= 8) &&  (novoY >= 0 && novoY <= 8 ) )
+    if(( x >= 0 && x <= 7) &&  (y >= 0 && y <= 7 ) && ( novoX >= 0 && novoX <= 7) &&  (novoY >= 0 && novoY <= 7 ) )
     {
         // PECA PRETA (X)
-        if(tab[y][x] == 'x' && jogador == 1)
+        if (((tab[y][x] == 'x')||tab[y][x] == 'X') && jogador == 1)
         {
+            if(tab[y][x] == 'X'){
+                    if(diagonalDama(tab,x,y,novoX,novoY,1,brancas,pretas)){
+
+                    }
+                    else{
+                        novamente(x,y,novoX,novoY, jogador,a,b,A,B);
+                        movimento(a,b,A,B,jogador,brancas, pretas,tab);
+                    }
+
+            }
+
+            else{
             // Movimento simples para frente:
             if ( (novoY == (y+1)) && ((novoX == (x-1) || novoX == (x+1) ) &&  XY == ' ' ))
             {
@@ -259,6 +382,7 @@ void movimento(char x, char y,char novoX, char novoY,int jogador,int &brancas, i
                 movimento(a,b,A,B,jogador,brancas, pretas,tab);
             }
 
+        }
         }
 
         // PECA BRANCA (O)
@@ -595,38 +719,14 @@ int main()
                 }
             }
 
-            if(brancas == 0){
-cout<<"  _____    _____    ______   _______               _____                 "<<endl;
-cout<<" |  __ \  |  __ \  |  ____| |__   __|     /\      / ____|                 "<<endl;
-cout<<" | |__) | | |__) | | |__       | |       /  \    | (___                    "<<endl;
-cout<<" |  ___/  |  _  /  |  __|      | |      / /\ \    \___ \                   "<<endl;
-cout<<" | |      | | \ \  | |____     | |     / ____ \   ____) |                  "<<endl;
-cout<<" |_|      |_|  \_\ |______|    |_|    /_/    \_\ |_____/                   "<<endl;
-  cout<< "/n"<<endl;
-cout << " __      __  ______   _   _    _____   ______   _____               __  __"<<endl;
-cout << " \ \    / / |  ____| | \ | |  / ____| |  ____| |  __ \      /\     |  \/  |"<<endl;
-cout << "  \ \  / /  | |__    |  \| | | |      | |__    | |__) |    /  \    | \  / |"<<endl;
-cout << "   \ \/ /   |  __|   | . ` | | |      |  __|   |  _  /    / /\ \   | |\/| |"<<endl;
-cout << "    \  /    | |____  | |\  | | |____  | |____  | | \ \   / ____ \  | |  | |"<<endl;
-cout << "     \/     |______| |_| \_|  \_____| |______| |_|  \_\ /_/    \_\ |_|  |_|"<<endl;
+            if(pretas == 0){
+                cout << "Jogador das pecas brancas ganhou o jogo!!!" << endl;
+
+
             }
 
             else{
-cout << "  ____    _____               _   _    _____               _____           "<<endl;
- cout << "|  _ \  |  __ \      /\     | \ | |  / ____|     /\      / ____|          "<<endl;
- cout << "| |_) | | |__) |    /  \    |  \| | | |         /  \    | (___            "<<endl;
- cout << "|  _ <  |  _  /    / /\ \   | . ` | | |        / /\ \    \___ \           "<<endl;
- cout << "| |_) | | | \ \   / ____ \  | |\  | | |____   / ____ \   ____) |          "<<endl;
- cout << "|____/  |_|  \_\ /_/    \_\ |_| \_|  \_____| /_/    \_\ |_____/           "<<endl;
-cout<< "/n"<<endl;
-
-cout << " __      __  ______   _   _    _____   ______   _____               __  __ "<<endl;
-cout << " \ \    / / |  ____| | \ | |  / ____| |  ____| |  __ \      /\     |  \/  |"<<endl;
-cout << "  \ \  / /  | |__    |  \| | | |      | |__    | |__) |    /  \    | \  / |"<<endl;
-cout << "   \ \/ /   |  __|   | . ` | | |      |  __|   |  _  /    / /\ \   | |\/| |"<<endl;
-cout << "    \  /    | |____  | |\  | | |____  | |____  | | \ \   / ____ \  | |  | |"<<endl;
-cout << "     \/     |______| |_| \_|  \_____| |______| |_|  \_\ /_/    \_\ |_|  |_|"<<endl;
-
+                cout << "Jogador das pecas pretas ganhou o jogo!!!" << endl;
             }
 
 
