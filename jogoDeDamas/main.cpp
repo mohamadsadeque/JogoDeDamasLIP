@@ -64,7 +64,7 @@ void novamente(char tab[][8],int &brancas, int &pretas,char &x, char &y, char &n
     cout << "Nao e possivel efetuar a jogada!, digite novamente: \n" << endl;
     cout << "Jogador " <<  jogador << " , digite a peca que deseja mover (exemplo: b 3)" << endl;
     cin >> x >> y;
-    cout << "Jogador " <<  jogador << " , digite o local que a peca ir· se mover (exemplo: c 4)" << endl;
+    cout << "Jogador " <<  jogador << " , digite o local que a peca ir√° se mover (exemplo: c 4)" << endl;
     cin >> novoX >> novoY;
     a = (int)x - 97;
     b = (int)y - 49;
@@ -736,7 +736,7 @@ bool chanceCaptura(char tab[8][8],int &compX, int &compY, int &newCompX, int &ne
                     return true;
 
                 }
-                // Esquerda e para Tr·s
+                // Esquerda e para Tr√°s
                 else if( (tab[j+1][i-1] == 'x'||tab[j+1][i-1] == 'X'  ) && tab[j+2][i-2] == ' ' )
                 {
                     compX = i;
@@ -746,7 +746,7 @@ bool chanceCaptura(char tab[8][8],int &compX, int &compY, int &newCompX, int &ne
                     return true;
 
                 }
-                // direita e para Tr·s
+                // direita e para Tr√°s
                 else if(( tab[j+1][i+1] == 'x'|| tab[j+1][i+1] == 'x') && tab[j+2][i+2] == ' ' )
                 {
                     compX = i;
@@ -786,7 +786,7 @@ int main()
     {'o','#','o','#','o','#','o','#'},
 };
 
-        cout << "Digite a opÁ„o que deseja: " << endl;
+        cout << "Digite a op√ß√£o que deseja: " << endl;
         cout << "1. Jogador Vs Jogador" << endl;
         cout << "2. Jogador Vs Computador" << endl;
         cout << "3. Sair" << endl;
@@ -889,11 +889,10 @@ int main()
 
 
         }
-        cin.ignore();
         do{
-        system("cls");
         cout << "Deseja voltar ao menu? Sim(1) ou Nao(2)" << endl;
         cin >> modo;
+        system("cls");
         }while(modo != 1 && modo != 2);
         if(modo == 2){
         return 0;
