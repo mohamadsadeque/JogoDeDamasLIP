@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1528570265 source:c:\users\silvana\desktop\jogo\jogodedamas\main.cpp
+	<iostream>
+	<stdlib.h>
+	<cstdlib>
+	<ctime>
+
